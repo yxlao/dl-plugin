@@ -19,7 +19,7 @@
 #define ARGS_11(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, ...) a11
 
 #define COUNT_ARGS(...) \
-    ARGS_11(dummy, ##__VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+    ARGS_11(dummy, __VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 
 // TYPES, PARAMS
 #define EXTRACT_TYPES_PARAMS_4(...) \
@@ -52,7 +52,10 @@ int four = COUNT_ARGS(float, e, float, f);
 
 int CALL_EXTRACT_PARAMS(4, float, g, float, h) = 5000;
 
-// // int COUNT_CALL_EXTRACT_PARAMS(float, a, float, b);
+// int COUNT_CALL_EXTRACT_PARAMS(float, i, float, j) = 6000;
+
+// int CALL_EXTRACT_PARAMS(COUNT_ARGS(float, i, float, j), float, i, float, j) =
+//         6000;
 
 // float add(float a, float b) { return a + b; }
 
@@ -104,6 +107,7 @@ void* GetLibHandle() {
         std::cout << "Loaded " << lib_name << std::endl;
         std::cout << "a " << a << std::endl;
         std::cout << "b " << b << std::endl;
+        std::cout << "four " << four << std::endl;
         std::cout << "c " << c << std::endl;
         std::cout << "d " << d << std::endl;
         std::cout << "h " << h << std::endl;
