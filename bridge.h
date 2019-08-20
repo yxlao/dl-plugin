@@ -1,7 +1,8 @@
 #pragma once
 
-// Forward declares
-struct Point;
+// To prevent header dependencies
+// Do not include this file in *.h, only in *.cc
+#include "point.h"
 
 namespace bridge {
 
