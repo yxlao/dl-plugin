@@ -1,4 +1,5 @@
 #include <dlfcn.h>
+#include <functional>
 #include <iostream>
 #include <string>
 
@@ -23,13 +24,15 @@ void* GetLibHandle() {
 
 namespace bridge {
 
+// Example of casting ot std::function
 struct Point add_point(struct Point a, struct Point b) {
     static const std::string func_name = "add_point";
-    typedef struct Point (*func_t)(struct Point a, struct Point b);
-    static func_t func = nullptr;
+    using signature = struct Point(struct Point, struct Point);
+    std::function<signature> func = nullptr;
 
     if (!func) {
-        func = (func_t)dlsym(GetLibHandle(), func_name.c_str());
+        func = static_cast<signature*>(
+                (signature*)dlsym(GetLibHandle(), func_name.c_str()));
         if (!func) {
             const char* msg = dlerror();
             throw std::runtime_error("Cannot load " + func_name + ": " +
@@ -40,6 +43,7 @@ struct Point add_point(struct Point a, struct Point b) {
     return func(a, b);
 }
 
+// Example of using the function pointer directly
 struct Point mul_point(struct Point a, struct Point b) {
     static const std::string func_name = "mul_point";
     typedef struct Point (*func_t)(struct Point a, struct Point b);
@@ -56,5 +60,10 @@ struct Point mul_point(struct Point a, struct Point b) {
 
     return func(a, b);
 }
+
+// DEFINE_BRIDGED_FUNCTION(mul_point,
+//                         struct Point,
+//                         struct Point(a),
+//                         struct Point(b));
 
 }  // namespace bridge
