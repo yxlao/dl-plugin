@@ -24,7 +24,7 @@ void* GetLibHandle() {
 
 namespace bridge {
 
-// Example of casting ot std::function
+// Example 1: casting to std::function
 struct Point add_point(struct Point a, struct Point b) {
     static const std::string func_name = "add_point";
     using signature = struct Point(struct Point, struct Point);
@@ -43,9 +43,9 @@ struct Point add_point(struct Point a, struct Point b) {
     return func(a, b);
 }
 
-// Example of using the function pointer directly
-struct Point mul_point(struct Point a, struct Point b) {
-    static const std::string func_name = "mul_point";
+// Example 2: use function pointer directly
+struct Point sub_point(struct Point a, struct Point b) {
+    static const std::string func_name = "sub_point";
     typedef struct Point (*func_t)(struct Point a, struct Point b);
     static func_t func = nullptr;
 
@@ -61,9 +61,21 @@ struct Point mul_point(struct Point a, struct Point b) {
     return func(a, b);
 }
 
-// DEFINE_BRIDGED_FUNCTION(mul_point,
-//                         struct Point,
-//                         struct Point(a),
-//                         struct Point(b));
+// Example 3: use macro
+DEFINE_BRIDGED_FUNCTION(mul_point, Point, Point(a), Point(b))
+// Point mul_point(Point(a), Point(b)) {
+//     static const std::string f_name = "mul_point";
+//     typedef Point (*f_type)(Point(a), Point(b));
+//     static f_type f = nullptr;
+//     if (!f) {
+//         f = (f_type)dlsym(GetLibHandle(), "mul_point");
+//         if (!f) {
+//             const char* msg = dlerror();
+//             throw std::runtime_error(std::string("Cannot load ") +
+//                                      "mul_point" + ": " + msg);
+//         }
+//     }
+//     return f(Point(a), Point(b));
+// }
 
 }  // namespace bridge

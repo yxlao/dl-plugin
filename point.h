@@ -12,6 +12,8 @@ struct Point {
 
 struct Point add_point(struct Point a, struct Point b);
 
+struct Point sub_point(struct Point a, struct Point b);
+
 struct Point mul_point(struct Point a, struct Point b);
 
 #ifdef __cplusplus
