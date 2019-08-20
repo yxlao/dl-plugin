@@ -23,23 +23,23 @@
 
 // TYPES, PARAMS
 #define EXTRACT_TYPES_PARAMS_4(...) \
-    ARGS_1(##__VA_ARGS__)           \
-    ARGS_2(##__VA_ARGS__), ARGS_3(##__VA_ARGS__) ARGS_4(##__VA_ARGS__)
+    ARGS_1(__VA_ARGS__)             \
+    ARGS_2(__VA_ARGS__), ARGS_3(__VA_ARGS__) ARGS_4(__VA_ARGS__)
 
 #define CALL_EXTRACT_TYPES_PARAMS(num_args, ...) \
-    EXTRACT_TYPES_PARAMS_##num_args(##__VA_ARGS__)
+    EXTRACT_TYPES_PARAMS_##num_args(__VA_ARGS__)
 
 #define COUNT_CALL_EXTRACT_TYPES_PARAMS(...) \
-    CALL_EXTRACT_TYPES_PARAMS(COUNT_ARGS(##__VA_ARGS__), ##__VA_ARGS__)
+    CALL_EXTRACT_TYPES_PARAMS(COUNT_ARGS(__VA_ARGS__), __VA_ARGS__)
 
 // PARAMS
 #define EXTRACT_PARAMS_4(...) ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__)
 
 #define CALL_EXTRACT_PARAMS(num_args, ...) \
-    EXTRACT_PARAMS_##num_args(##__VA_ARGS__)
+    EXTRACT_PARAMS_##num_args(__VA_ARGS__)
 
 #define COUNT_CALL_EXTRACT_PARAMS(...) \
-    CALL_EXTRACT_PARAMS(COUNT_ARGS(##__VA_ARGS__), ##__VA_ARGS__)
+    CALL_EXTRACT_PARAMS(COUNT_ARGS(__VA_ARGS__), __VA_ARGS__)
 
 // int ARGS_2(float, a, float, b) = 0;
 
@@ -48,13 +48,9 @@ int ARGS_4(float, a, float, b) = 200;
 
 int EXTRACT_PARAMS_4(float, c, float, d) = 4000;
 
-// int four = COUNT_ARGS(float, a, float, b);
+int four = COUNT_ARGS(float, e, float, f);
 
-// int CALL_EXTRACT_PARAMS(COUNT_ARGS(float, a, float, b), float, a, float, b);
-
-// int CALL_EXTRACT_PARAMS(4, float, a, float, b);
-
-// int ok = COUNT_ARGS(float, a, float, b);
+int CALL_EXTRACT_PARAMS(4, float, g, float, h) = 5000;
 
 // // int COUNT_CALL_EXTRACT_PARAMS(float, a, float, b);
 
@@ -65,7 +61,7 @@ int EXTRACT_PARAMS_4(float, c, float, d) = 4000;
 //         return add(COUNT_CALL_EXTRACT_PARAMS(##__VA_ARGS__));            \
 //     }
 
-// // DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
+// DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
 
 // int foo_func(CALL_EXTRACT_TYPES_PARAMS(
 //         COUNT_ARGS(float, a, float, b), float, a, float, b)) {
@@ -110,6 +106,7 @@ void* GetLibHandle() {
         std::cout << "b " << b << std::endl;
         std::cout << "c " << c << std::endl;
         std::cout << "d " << d << std::endl;
+        std::cout << "h " << h << std::endl;
         if (!handle) {
             const char* msg = dlerror();
             throw std::runtime_error("Cannot load " + std::string(msg));
