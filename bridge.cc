@@ -6,6 +6,9 @@
 #include "bridge.h"
 #include "point.h"
 
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+
 #define ARGS_1(a1, ...) a1
 #define ARGS_2(a1, a2, ...) a2
 #define ARGS_3(a1, a2, a3, ...) a3
@@ -39,7 +42,7 @@
     EXTRACT_PARAMS_##num_args(__VA_ARGS__)
 
 #define COUNT_CALL_EXTRACT_PARAMS(...) \
-    CALL_EXTRACT_PARAMS(COUNT_ARGS(__VA_ARGS__), __VA_ARGS__)
+    CALL_EXTRACT_PARAMS(TOSTRING(COUNT_ARGS(__VA_ARGS__)), __VA_ARGS__)
 
 // int ARGS_2(float, a, float, b) = 0;
 
@@ -51,6 +54,8 @@ int EXTRACT_PARAMS_4(float, c, float, d) = 4000;
 int four = COUNT_ARGS(float, e, float, f);
 
 int CALL_EXTRACT_PARAMS(4, float, g, float, h) = 5000;
+
+std::string s = TOSTRING(COUNT_ARGS(float, e, float, f));
 
 // int COUNT_CALL_EXTRACT_PARAMS(float, i, float, j) = 6000;
 
@@ -111,6 +116,7 @@ void* GetLibHandle() {
         std::cout << "c " << c << std::endl;
         std::cout << "d " << d << std::endl;
         std::cout << "h " << h << std::endl;
+        std::cout << "s " << s << std::endl;
         if (!handle) {
             const char* msg = dlerror();
             throw std::runtime_error("Cannot load " + std::string(msg));
