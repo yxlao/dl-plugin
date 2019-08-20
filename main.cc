@@ -7,13 +7,12 @@ int main() {
     Point a = {1, 2};
     Point b = {10, 20};
 
-    void* handle = dlopen("./libpoint.so", RTLD_LAZY);
+    void* handle = dlopen("libpoint.so", RTLD_LAZY);
     if (!handle) {
         std::cerr << "Cannot open library: " << dlerror() << '\n';
         return 1;
     }
 
-    std::cout << "Loading symbol hello...\n";
     dlerror();
     typedef struct Point (*add_point_t)(struct Point, struct Point);
     add_point_t add_point = (add_point_t)dlsym(handle, "add_point");
