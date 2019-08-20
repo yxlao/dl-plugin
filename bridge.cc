@@ -6,6 +6,82 @@
 #include "bridge.h"
 #include "point.h"
 
+#define ARGS_1(a1, ...) a1
+#define ARGS_2(a1, a2, ...) a2
+#define ARGS_3(a1, a2, a3, ...) a3
+#define ARGS_4(a1, a2, a3, a4, ...) a4
+#define ARGS_5(a1, a2, a3, a4, a5, ...) a5
+#define ARGS_6(a1, a2, a3, a4, a5, a6, ...) a6
+#define ARGS_7(a1, a2, a3, a4, a5, a6, a7, ...) a7
+#define ARGS_8(a1, a2, a3, a4, a5, a6, a7, a8, ...) a8
+#define ARGS_9(a1, a2, a3, a4, a5, a6, a7, a8, a9, ...) a9
+#define ARGS_10(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, ...) a10
+#define ARGS_11(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, ...) a11
+
+#define COUNT_ARGS(...) \
+    ARGS_11(dummy, ##__VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+
+// TYPES, PARAMS
+#define EXTRACT_TYPES_PARAMS_4(...) \
+    ARGS_1(##__VA_ARGS__)           \
+    ARGS_2(##__VA_ARGS__), ARGS_3(##__VA_ARGS__) ARGS_4(##__VA_ARGS__)
+
+#define CALL_EXTRACT_TYPES_PARAMS(num_args, ...) \
+    EXTRACT_TYPES_PARAMS_##num_args(##__VA_ARGS__)
+
+#define COUNT_CALL_EXTRACT_TYPES_PARAMS(...) \
+    CALL_EXTRACT_TYPES_PARAMS(COUNT_ARGS(##__VA_ARGS__), ##__VA_ARGS__)
+
+// PARAMS
+#define EXTRACT_PARAMS_4(...) ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__)
+
+#define CALL_EXTRACT_PARAMS(num_args, ...) \
+    EXTRACT_PARAMS_##num_args(##__VA_ARGS__)
+
+#define COUNT_CALL_EXTRACT_PARAMS(...) \
+    CALL_EXTRACT_PARAMS(COUNT_ARGS(##__VA_ARGS__), ##__VA_ARGS__)
+
+// int ARGS_2(float, a, float, b) = 0;
+
+int ARGS_2(float, a, float, b) = 100;
+int ARGS_4(float, a, float, b) = 200;
+
+int EXTRACT_PARAMS_4(float, c, float, d) = 4000;
+
+// int four = COUNT_ARGS(float, a, float, b);
+
+// int CALL_EXTRACT_PARAMS(COUNT_ARGS(float, a, float, b), float, a, float, b);
+
+// int CALL_EXTRACT_PARAMS(4, float, a, float, b);
+
+// int ok = COUNT_ARGS(float, a, float, b);
+
+// // int COUNT_CALL_EXTRACT_PARAMS(float, a, float, b);
+
+// float add(float a, float b) { return a + b; }
+
+// #define DEFINE_PLUGIN_FUNC(f_name, return_type, ...)                     \
+//     return_type f_name(COUNT_CALL_EXTRACT_TYPES_PARAMS(##__VA_ARGS__)) { \
+//         return add(COUNT_CALL_EXTRACT_PARAMS(##__VA_ARGS__));            \
+//     }
+
+// // DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
+
+// int foo_func(CALL_EXTRACT_TYPES_PARAMS(
+//         COUNT_ARGS(float, a, float, b), float, a, float, b)) {
+//     return add(CALL_EXTRACT_PARAMS(COUNT_ARGS(float, a, float, b), float, a,
+//                                    float, b));
+// }
+
+// #define CONCATENATE_IMPL(s1, s2) s1##s2
+// #define CONCATENATE(s1, s2) CONCATENATE_IMPL(s1, s2)
+
+// // #define BACK 4
+// // #define FUNC_NAME PARAM##BACK
+// #define CALL_PARAMS(num_args, ...) PARAMS##num_args(##__VA_ARGS__)
+
+// CALL_PARAMS(4, float, a, double, b)
+
 // https://stackoverflow.com/a/44759398/1255535
 #define DEFINE_BRIDGED_FUNCTION(f_name, return_type, ...)              \
     return_type f_name(__VA_ARGS__) {                                  \
@@ -30,6 +106,10 @@ void* GetLibHandle() {
     if (!handle) {
         handle = dlopen(lib_name.c_str(), RTLD_LAZY);
         std::cout << "Loaded " << lib_name << std::endl;
+        std::cout << "a " << a << std::endl;
+        std::cout << "b " << b << std::endl;
+        std::cout << "c " << c << std::endl;
+        std::cout << "d " << d << std::endl;
         if (!handle) {
             const char* msg = dlerror();
             throw std::runtime_error("Cannot load " + std::string(msg));
