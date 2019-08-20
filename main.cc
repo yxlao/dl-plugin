@@ -10,5 +10,8 @@ int main() {
 
     Point c = bridge::add_point(a, b);
     std::cout << "Point c: " << c.x << ", " << c.y << std::endl;
+
+    Point d = bridge::mul_point(a, b);
+    std::cout << "Point d: " << d.x << ", " << d.y << std::endl;
     return 0;
 }

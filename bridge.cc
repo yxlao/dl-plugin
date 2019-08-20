@@ -24,12 +24,10 @@ void* GetLibHandle() {
 namespace bridge {
 
 struct Point add_point(struct Point a, struct Point b) {
-    // func_name, func_t and func
     static const std::string func_name = "add_point";
     typedef struct Point (*func_t)(struct Point a, struct Point b);
     static func_t func = nullptr;
 
-    // Load func
     if (!func) {
         func = (func_t)dlsym(GetLibHandle(), func_name.c_str());
         if (!func) {
@@ -39,7 +37,23 @@ struct Point add_point(struct Point a, struct Point b) {
         }
     }
 
-    // Run func, now func != nullptr
+    return func(a, b);
+}
+
+struct Point mul_point(struct Point a, struct Point b) {
+    static const std::string func_name = "mul_point";
+    typedef struct Point (*func_t)(struct Point a, struct Point b);
+    static func_t func = nullptr;
+
+    if (!func) {
+        func = (func_t)dlsym(GetLibHandle(), func_name.c_str());
+        if (!func) {
+            const char* msg = dlerror();
+            throw std::runtime_error("Cannot load " + func_name + ": " +
+                                     std::string(msg));
+        }
+    }
+
     return func(a, b);
 }
 
