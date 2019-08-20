@@ -1,18 +1,17 @@
 #pragma once
 
 // https://stackoverflow.com/a/44759398/1255535
-#define DEFINE_BRIDGED_FUNCTION(func_name, return_type, ...)           \
-    return_type func_name(__VA_ARGS__) {                               \
-        static const std::string f_name = #func_name;                  \
+#define DEFINE_BRIDGED_FUNCTION(f_name, return_type, ...)              \
+    return_type f_name(__VA_ARGS__) {                                  \
         typedef return_type (*f_type)(__VA_ARGS__);                    \
         static f_type f = nullptr;                                     \
                                                                        \
         if (!f) {                                                      \
-            f = (f_type)dlsym(GetLibHandle(), #func_name);             \
+            f = (f_type)dlsym(GetLibHandle(), #f_name);                \
             if (!f) {                                                  \
                 const char* msg = dlerror();                           \
                 throw std::runtime_error(std::string("Cannot load ") + \
-                                         #func_name + ": " + msg);     \
+                                         #f_name + ": " + msg);        \
             }                                                          \
         }                                                              \
         return f(__VA_ARGS__);                                         \
