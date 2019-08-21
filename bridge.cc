@@ -58,7 +58,12 @@ float add(float a, float b) { return a + b; }
         return add(CALL_EXTRACT_PARAMS(num_args, __VA_ARGS__));            \
     }
 
-DEFINE_PLUGIN_FUNC(foo_func, int, 4, float, a, float, b)
+    // DEFINE_PLUGIN_FUNC(foo_func, int, 4, float, a, float, b)
+
+#define DEFINE_PLUGIN_FUNC_AUTO_COUNT(f_name, return_type, ...)      \
+    DEFINE_PLUGIN_FUNC(f_name, return_type, COUNT_ARGS(__VA_ARGS__), \
+                       __VA_ARGS__)
+DEFINE_PLUGIN_FUNC_AUTO_COUNT(foo_func, int, float, a, float, b)
 
 // https://stackoverflow.com/a/44759398/1255535
 #define DEFINE_BRIDGED_FUNCTION(f_name, return_type, ...)              \
