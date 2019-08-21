@@ -129,8 +129,58 @@
 // To:
 //     a1, a2, a3, a4
 // clang-format off
-#define EXTRACT_PARAMS_4(...) ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__)
-#define EXTRACT_PARAMS_6(...) ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__), ARGS_6(__VA_ARGS__)
+
+#define EXTRACT_PARAMS_0(...)
+
+#define EXTRACT_PARAMS_2(...) \
+    ARGS_2(__VA_ARGS__)
+
+#define EXTRACT_PARAMS_4(...) \
+    ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__)
+
+#define EXTRACT_PARAMS_6(...) \
+    ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__), \
+    ARGS_6(__VA_ARGS__)
+
+#define EXTRACT_PARAMS_8(...) \
+    ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__), \
+    ARGS_6(__VA_ARGS__), ARGS_8(__VA_ARGS__)
+
+#define EXTRACT_PARAMS_10(...) \
+    ARGS_2 (__VA_ARGS__), ARGS_4 (__VA_ARGS__), \
+    ARGS_6 (__VA_ARGS__), ARGS_8 (__VA_ARGS__), \
+    ARGS_10(__VA_ARGS__)
+
+#define EXTRACT_PARAMS_12(...) \
+    ARGS_2 (__VA_ARGS__), ARGS_4 (__VA_ARGS__), \
+    ARGS_6 (__VA_ARGS__), ARGS_8 (__VA_ARGS__), \
+    ARGS_10(__VA_ARGS__), ARGS_12(__VA_ARGS__)
+
+#define EXTRACT_PARAMS_14(...) \
+    ARGS_2 (__VA_ARGS__), ARGS_4 (__VA_ARGS__), \
+    ARGS_6 (__VA_ARGS__), ARGS_8 (__VA_ARGS__), \
+    ARGS_10(__VA_ARGS__), ARGS_12(__VA_ARGS__), \
+    ARGS_14(__VA_ARGS__)
+
+#define EXTRACT_PARAMS_16(...) \
+    ARGS_2 (__VA_ARGS__), ARGS_4 (__VA_ARGS__), \
+    ARGS_6 (__VA_ARGS__), ARGS_8 (__VA_ARGS__), \
+    ARGS_10(__VA_ARGS__), ARGS_12(__VA_ARGS__), \
+    ARGS_14(__VA_ARGS__), ARGS_16(__VA_ARGS__)
+
+#define EXTRACT_PARAMS_18(...) \
+    ARGS_2 (__VA_ARGS__), ARGS_4 (__VA_ARGS__), \
+    ARGS_6 (__VA_ARGS__), ARGS_8 (__VA_ARGS__), \
+    ARGS_10(__VA_ARGS__), ARGS_12(__VA_ARGS__), \
+    ARGS_14(__VA_ARGS__), ARGS_16(__VA_ARGS__), \
+    ARGS_18(__VA_ARGS__)
+
+#define EXTRACT_PARAMS_20(...) \
+    ARGS_2 (__VA_ARGS__), ARGS_4 (__VA_ARGS__), \
+    ARGS_6 (__VA_ARGS__), ARGS_8 (__VA_ARGS__), \
+    ARGS_10(__VA_ARGS__), ARGS_12(__VA_ARGS__), \
+    ARGS_14(__VA_ARGS__), ARGS_16(__VA_ARGS__), \
+    ARGS_18(__VA_ARGS__), ARGS_20(__VA_ARGS__)
 // clang-format on
 
 // Convert to list of "arg_name" caller
