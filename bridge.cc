@@ -71,6 +71,7 @@ float add(float a, float b) { return a + b; }
 
 DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
 
+// https://stackoverflow.com/a/44759398/1255535
 #define DEFINE_BRIDGED_FUNC_WITH_COUNT(f_name, return_type, num_args, ...) \
     return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
         typedef return_type (*f_type)(                                     \
@@ -91,23 +92,6 @@ DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
 #define DEFINE_BRIDGED_FUNC(f_name, return_type, ...)   \
     DEFINE_BRIDGED_FUNC_WITH_COUNT(f_name, return_type, \
                                    COUNT_ARGS(__VA_ARGS__), __VA_ARGS__)
-
-// https://stackoverflow.com/a/44759398/1255535
-#define DEFINE_BRIDGED_FUNCTION(f_name, return_type, ...)              \
-    return_type f_name(__VA_ARGS__) {                                  \
-        typedef return_type (*f_type)(__VA_ARGS__);                    \
-        static f_type f = nullptr;                                     \
-                                                                       \
-        if (!f) {                                                      \
-            f = (f_type)dlsym(GetLibHandle(), #f_name);                \
-            if (!f) {                                                  \
-                const char* msg = dlerror();                           \
-                throw std::runtime_error(std::string("Cannot load ") + \
-                                         #f_name + ": " + msg);        \
-            }                                                          \
-        }                                                              \
-        return f(__VA_ARGS__);                                         \
-    }
 
 void* GetLibHandle() {
     static void* handle = nullptr;
@@ -169,19 +153,5 @@ struct Point sub_point(struct Point a, struct Point b) {
 // Example 3: use macro
 // DEFINE_BRIDGED_FUNCTION(mul_point, Point, Point(a), Point(b))
 DEFINE_BRIDGED_FUNC(mul_point, Point, Point, a, Point, b)
-// Point mul_point(Point(a), Point(b)) {
-//     static const std::string f_name = "mul_point";
-//     typedef Point (*f_type)(Point(a), Point(b));
-//     static f_type f = nullptr;
-//     if (!f) {
-//         f = (f_type)dlsym(GetLibHandle(), "mul_point");
-//         if (!f) {
-//             const char* msg = dlerror();
-//             throw std::runtime_error(std::string("Cannot load ") +
-//                                      "mul_point" + ": " + msg);
-//         }
-//     }
-//     return f(Point(a), Point(b));
-// }
 
 }  // namespace bridge
