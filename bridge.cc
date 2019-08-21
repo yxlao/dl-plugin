@@ -44,37 +44,14 @@
 #define COUNT_CALL_EXTRACT_PARAMS(...) \
     CALL_EXTRACT_PARAMS(COUNT_ARGS(__VA_ARGS__), __VA_ARGS__)
 
-// int ARGS_2(float, a, float, b) = 0;
-
 int ARGS_2(float, a, float, b) = 100;
 int ARGS_4(float, a, float, b) = 200;
-
 int EXTRACT_PARAMS_4(float, c, float, d) = 4000;
-
 int four = COUNT_ARGS(float, e, float, f);
-
 int four2 = COUNT_ARGS(float, i, float, j);
-
 int CALL_EXTRACT_PARAMS(4, float, g, float, h) = 5000;
-
 std::string s = TOSTRING(COUNT_ARGS(float, e, float, f));
-
-// int COUNT_CALL_EXTRACT_PARAMS(float, i, float, j) = 6000;
-
-// int CALL_EXTRACT_PARAMS(COUNT_ARGS(float, i, float, j), float, i, float, j) =
-//         6000;
-
-// int CALL_EXTRACT_PARAMS(COUNT_ARGS(float, i, float, j), float, i, float, j) =
-//         6000;
-
 float add(float a, float b) { return a + b; }
-
-    // #define DEFINE_PLUGIN_FUNC(f_name, return_type, ...)                     \
-//     return_type f_name(COUNT_CALL_EXTRACT_TYPES_PARAMS(##__VA_ARGS__)) { \
-//         return add(COUNT_CALL_EXTRACT_PARAMS(##__VA_ARGS__));            \
-//     }
-
-    // DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
 
 #define DEFINE_PLUGIN_FUNC(f_name, return_type, num_args, ...)             \
     return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
@@ -82,66 +59,6 @@ float add(float a, float b) { return a + b; }
     }
 
 DEFINE_PLUGIN_FUNC(foo_func, int, 4, float, a, float, b)
-
-// int foo_func(CALL_EXTRACT_TYPES_PARAMS(
-//         COUNT_ARGS(float, a, float, b), float, a, float, b)) {
-//     return add(CALL_EXTRACT_PARAMS(COUNT_ARGS(float, a, float, b), float, a,
-//                                    float, b));
-// }
-
-// #define CONCATENATE_IMPL(s1, s2) s1##s2
-// #define CONCATENATE(s1, s2) CONCATENATE_IMPL(s1, s2)
-
-// // #define BACK 4
-// // #define FUNC_NAME PARAM##BACK
-// #define CALL_PARAMS(num_args, ...) PARAMS##num_args(##__VA_ARGS__)
-
-// CALL_PARAMS(4, float, a, double, b)
-
-// #define EVERY_SECOND0(...)
-
-// #define EVERY_SECOND1_(second, ...) , second
-// #define EVERY_SECOND1(first, ...) EVERY_SECOND1_(__VA_ARGS__)
-
-// #define EVERY_SECOND2_(second, ...) , second EVERY_SECOND1(__VA_ARGS__)
-// #define EVERY_SECOND2(first, ...) EVERY_SECOND2_(__VA_ARGS__)
-
-// #define EVERY_SECOND3_(second, ...) , second EVERY_SECOND2(__VA_ARGS__)
-// #define EVERY_SECOND3(first, ...) EVERY_SECOND3_(__VA_ARGS__)
-
-// #define EVERY_SECOND4_(second, ...) , second EVERY_SECOND3(__VA_ARGS__)
-// #define EVERY_SECOND4(first, ...) EVERY_SECOND4_(__VA_ARGS__)
-
-// #define EVERY_SECOND5_(second, ...) , second EVERY_SECOND4(__VA_ARGS__)
-// #define EVERY_SECOND5(first, ...) EVERY_SECOND5_(__VA_ARGS__)
-
-// #define COUNT_EVERY_SECOND(_1, __1, _2, __2, _3, __3, _4, __4, _5, __5, num, \
-//                            ...)                                              \
-//     EVERY_SECOND##num
-// #define EVERY_SECOND(...) \
-//     COUNT_EVERY_SECOND(__VA_ARGS__, 5, 5, 4, 4, 3, 3, 2, 2, 1, 0)(__VA_ARGS__)
-
-// #define INTERFACE_FN(_NAME, _X, _Y, _N_PARAMS, ...)                       \
-//     void _NAME(__VA_ARGS__) {                                             \
-//         processing_function(_X, _Y, _N_PARAMS EVERY_SECOND(__VA_ARGS__)); \
-//     }
-
-// class parentClass {};
-// class ClassX {};
-// class ClassY {};
-// class ClassZ {};
-
-// void processing_function(int x, int y, int count, ...) {
-//     va_list params;
-//     va_start(params, count);
-//     while (count--) {
-//     }
-//     va_end(params);
-// }
-
-// INTERFACE_FN(foo, 1, 2, 0);
-// INTERFACE_FN(bar, 3, 4, 1, ClassX*, x);
-// INTERFACE_FN(jar, 5, 6, 2, ClassY*, y, ClassZ*, z);
 
 // https://stackoverflow.com/a/44759398/1255535
 #define DEFINE_BRIDGED_FUNCTION(f_name, return_type, ...)              \
