@@ -22,7 +22,7 @@
 #define ARGS_11(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, ...) a11
 
 #define COUNT_ARGS(...) \
-    ARGS_11(dummy, __VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+    ARGS_11(dummy, ##__VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 
 // TYPES, PARAMS
 #define EXTRACT_TYPES_PARAMS_4(...) \
@@ -42,7 +42,7 @@
     EXTRACT_PARAMS_##num_args(__VA_ARGS__)
 
 #define COUNT_CALL_EXTRACT_PARAMS(...) \
-    CALL_EXTRACT_PARAMS(TOSTRING(COUNT_ARGS(__VA_ARGS__)), __VA_ARGS__)
+    CALL_EXTRACT_PARAMS(COUNT_ARGS(__VA_ARGS__), __VA_ARGS__)
 
 // int ARGS_2(float, a, float, b) = 0;
 
@@ -53,6 +53,8 @@ int EXTRACT_PARAMS_4(float, c, float, d) = 4000;
 
 int four = COUNT_ARGS(float, e, float, f);
 
+int four2 = COUNT_ARGS(float, i, float, j);
+
 int CALL_EXTRACT_PARAMS(4, float, g, float, h) = 5000;
 
 std::string s = TOSTRING(COUNT_ARGS(float, e, float, f));
@@ -62,14 +64,24 @@ std::string s = TOSTRING(COUNT_ARGS(float, e, float, f));
 // int CALL_EXTRACT_PARAMS(COUNT_ARGS(float, i, float, j), float, i, float, j) =
 //         6000;
 
-// float add(float a, float b) { return a + b; }
+// int CALL_EXTRACT_PARAMS(COUNT_ARGS(float, i, float, j), float, i, float, j) =
+//         6000;
 
-// #define DEFINE_PLUGIN_FUNC(f_name, return_type, ...)                     \
+float add(float a, float b) { return a + b; }
+
+    // #define DEFINE_PLUGIN_FUNC(f_name, return_type, ...)                     \
 //     return_type f_name(COUNT_CALL_EXTRACT_TYPES_PARAMS(##__VA_ARGS__)) { \
 //         return add(COUNT_CALL_EXTRACT_PARAMS(##__VA_ARGS__));            \
 //     }
 
-// DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
+    // DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
+
+#define DEFINE_PLUGIN_FUNC(f_name, return_type, num_args, ...)             \
+    return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
+        return add(CALL_EXTRACT_PARAMS(num_args, __VA_ARGS__));            \
+    }
+
+DEFINE_PLUGIN_FUNC(foo_func, int, 4, float, a, float, b)
 
 // int foo_func(CALL_EXTRACT_TYPES_PARAMS(
 //         COUNT_ARGS(float, a, float, b), float, a, float, b)) {
@@ -85,6 +97,51 @@ std::string s = TOSTRING(COUNT_ARGS(float, e, float, f));
 // #define CALL_PARAMS(num_args, ...) PARAMS##num_args(##__VA_ARGS__)
 
 // CALL_PARAMS(4, float, a, double, b)
+
+// #define EVERY_SECOND0(...)
+
+// #define EVERY_SECOND1_(second, ...) , second
+// #define EVERY_SECOND1(first, ...) EVERY_SECOND1_(__VA_ARGS__)
+
+// #define EVERY_SECOND2_(second, ...) , second EVERY_SECOND1(__VA_ARGS__)
+// #define EVERY_SECOND2(first, ...) EVERY_SECOND2_(__VA_ARGS__)
+
+// #define EVERY_SECOND3_(second, ...) , second EVERY_SECOND2(__VA_ARGS__)
+// #define EVERY_SECOND3(first, ...) EVERY_SECOND3_(__VA_ARGS__)
+
+// #define EVERY_SECOND4_(second, ...) , second EVERY_SECOND3(__VA_ARGS__)
+// #define EVERY_SECOND4(first, ...) EVERY_SECOND4_(__VA_ARGS__)
+
+// #define EVERY_SECOND5_(second, ...) , second EVERY_SECOND4(__VA_ARGS__)
+// #define EVERY_SECOND5(first, ...) EVERY_SECOND5_(__VA_ARGS__)
+
+// #define COUNT_EVERY_SECOND(_1, __1, _2, __2, _3, __3, _4, __4, _5, __5, num, \
+//                            ...)                                              \
+//     EVERY_SECOND##num
+// #define EVERY_SECOND(...) \
+//     COUNT_EVERY_SECOND(__VA_ARGS__, 5, 5, 4, 4, 3, 3, 2, 2, 1, 0)(__VA_ARGS__)
+
+// #define INTERFACE_FN(_NAME, _X, _Y, _N_PARAMS, ...)                       \
+//     void _NAME(__VA_ARGS__) {                                             \
+//         processing_function(_X, _Y, _N_PARAMS EVERY_SECOND(__VA_ARGS__)); \
+//     }
+
+// class parentClass {};
+// class ClassX {};
+// class ClassY {};
+// class ClassZ {};
+
+// void processing_function(int x, int y, int count, ...) {
+//     va_list params;
+//     va_start(params, count);
+//     while (count--) {
+//     }
+//     va_end(params);
+// }
+
+// INTERFACE_FN(foo, 1, 2, 0);
+// INTERFACE_FN(bar, 3, 4, 1, ClassX*, x);
+// INTERFACE_FN(jar, 5, 6, 2, ClassY*, y, ClassZ*, z);
 
 // https://stackoverflow.com/a/44759398/1255535
 #define DEFINE_BRIDGED_FUNCTION(f_name, return_type, ...)              \
@@ -117,6 +174,7 @@ void* GetLibHandle() {
         std::cout << "d " << d << std::endl;
         std::cout << "h " << h << std::endl;
         std::cout << "s " << s << std::endl;
+        std::cout << "foo_func(3, 5) " << foo_func(3, 5) << std::endl;
         if (!handle) {
             const char* msg = dlerror();
             throw std::runtime_error("Cannot load " + std::string(msg));
