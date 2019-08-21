@@ -123,44 +123,45 @@ void* GetLibHandle() {
 namespace bridge {
 
 // Example 1: casting to std::function
-struct Point add_point(struct Point a, struct Point b) {
-    static const std::string f_name = "add_point";
-    using signature = struct Point(struct Point, struct Point);
-    std::function<signature> f = nullptr;
+// struct Point add_point(struct Point a, struct Point b) {
+//     static const std::string f_name = "add_point";
+//     using signature = struct Point(struct Point, struct Point);
+//     std::function<signature> f = nullptr;
 
-    if (!f) {
-        f = static_cast<signature*>(
-                (signature*)dlsym(GetLibHandle(), f_name.c_str()));
-        if (!f) {
-            const char* msg = dlerror();
-            throw std::runtime_error("Cannot load " + f_name + ": " +
-                                     std::string(msg));
-        }
-    }
+//     if (!f) {
+//         f = static_cast<signature*>(
+//                 (signature*)dlsym(GetLibHandle(), f_name.c_str()));
+//         if (!f) {
+//             const char* msg = dlerror();
+//             throw std::runtime_error("Cannot load " + f_name + ": " +
+//                                      std::string(msg));
+//         }
+//     }
 
-    return f(a, b);
-}
+//     return f(a, b);
+// }
 
 // Example 2: use function pointer directly
-struct Point sub_point(struct Point a, struct Point b) {
-    static const std::string f_name = "sub_point";
-    typedef struct Point (*f_type)(struct Point a, struct Point b);
-    static f_type f = nullptr;
+// struct Point sub_point(struct Point a, struct Point b) {
+//     static const std::string f_name = "sub_point";
+//     typedef struct Point (*f_type)(struct Point a, struct Point b);
+//     static f_type f = nullptr;
 
-    if (!f) {
-        f = (f_type)dlsym(GetLibHandle(), f_name.c_str());
-        if (!f) {
-            const char* msg = dlerror();
-            throw std::runtime_error("Cannot load " + f_name + ": " +
-                                     std::string(msg));
-        }
-    }
+//     if (!f) {
+//         f = (f_type)dlsym(GetLibHandle(), f_name.c_str());
+//         if (!f) {
+//             const char* msg = dlerror();
+//             throw std::runtime_error("Cannot load " + f_name + ": " +
+//                                      std::string(msg));
+//         }
+//     }
 
-    return f(a, b);
-}
+//     return f(a, b);
+// }
 
 // Example 3: use macro
-// DEFINE_BRIDGED_FUNCTION(mul_point, Point, Point(a), Point(b))
+DEFINE_BRIDGED_FUNC(add_point, Point, Point, a, Point, b)
+DEFINE_BRIDGED_FUNC(sub_point, Point, Point, a, Point, b)
 DEFINE_BRIDGED_FUNC(mul_point, Point, Point, a, Point, b)
 // DEFINE_BRIDGED_FUNC(add_point_three, Point, Point, a, Point, b, Point c)
 
