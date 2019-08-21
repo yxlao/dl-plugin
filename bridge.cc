@@ -58,20 +58,6 @@
 #define CALL_EXTRACT_PARAMS(num_args, ...) \
     EXTRACT_PARAMS_##num_args(__VA_ARGS__)
 
-float add(float a, float b) { return a + b; }
-
-#define DEFINE_PLUGIN_FUNC_WITH_COUNT(f_name, return_type, num_args, ...)  \
-    return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
-        return add(CALL_EXTRACT_PARAMS(num_args, __VA_ARGS__));            \
-    }
-
-#define DEFINE_PLUGIN_FUNC(f_name, return_type, ...)   \
-    DEFINE_PLUGIN_FUNC_WITH_COUNT(f_name, return_type, \
-                                  COUNT_ARGS(__VA_ARGS__), __VA_ARGS__)
-
-DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
-
-// https://stackoverflow.com/a/44759398/1255535
 #define DEFINE_BRIDGED_FUNC_WITH_COUNT(f_name, return_type, num_args, ...) \
     return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
         typedef return_type (*f_type)(                                     \
@@ -93,6 +79,19 @@ DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
     DEFINE_BRIDGED_FUNC_WITH_COUNT(f_name, return_type, \
                                    COUNT_ARGS(__VA_ARGS__), __VA_ARGS__)
 
+// float add(float a, float b) { return a + b; }
+
+// #define DEFINE_PLUGIN_FUNC_WITH_COUNT(f_name, return_type, num_args, ...)  \
+//     return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
+//         return add(CALL_EXTRACT_PARAMS(num_args, __VA_ARGS__));            \
+//     }
+
+// #define DEFINE_PLUGIN_FUNC(f_name, return_type, ...)   \
+//     DEFINE_PLUGIN_FUNC_WITH_COUNT(f_name, return_type, \
+//                                   COUNT_ARGS(__VA_ARGS__), __VA_ARGS__)
+
+// DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
+
 void* GetLibHandle() {
     static void* handle = nullptr;
     static const std::string lib_name = "libpoint.so";
@@ -100,7 +99,6 @@ void* GetLibHandle() {
     if (!handle) {
         handle = dlopen(lib_name.c_str(), RTLD_LAZY);
         std::cout << "Loaded " << lib_name << std::endl;
-        std::cout << "foo_func(3, 5) " << foo_func(3, 5) << std::endl;
         if (!handle) {
             const char* msg = dlerror();
             throw std::runtime_error("Cannot load " + std::string(msg));
