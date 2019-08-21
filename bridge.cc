@@ -24,46 +24,40 @@
 #define COUNT_ARGS(...) \
     ARGS_11(dummy, ##__VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 
-// TYPES, PARAMS
+// Convert to list of "arg_type arg_name"
+// Converts:
+//     float, a1, int, a2, short, a3, double, a4
+// To:
+//     float a1, int a2, short a3, double a4
 #define EXTRACT_TYPES_PARAMS_4(...) \
     ARGS_1(__VA_ARGS__)             \
     ARGS_2(__VA_ARGS__), ARGS_3(__VA_ARGS__) ARGS_4(__VA_ARGS__)
 
+// Convert to list of "arg_name"
+// Converts:
+//     float, a1, int, a2, short, a3, double, a4
+// To:
+//     a1, a2, a3, a4
+#define EXTRACT_PARAMS_4(...) ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__)
+
 #define CALL_EXTRACT_TYPES_PARAMS(num_args, ...) \
     EXTRACT_TYPES_PARAMS_##num_args(__VA_ARGS__)
-
-#define COUNT_CALL_EXTRACT_TYPES_PARAMS(...) \
-    CALL_EXTRACT_TYPES_PARAMS(COUNT_ARGS(__VA_ARGS__), __VA_ARGS__)
-
-// PARAMS
-#define EXTRACT_PARAMS_4(...) ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__)
 
 #define CALL_EXTRACT_PARAMS(num_args, ...) \
     EXTRACT_PARAMS_##num_args(__VA_ARGS__)
 
-#define COUNT_CALL_EXTRACT_PARAMS(...) \
-    CALL_EXTRACT_PARAMS(COUNT_ARGS(__VA_ARGS__), __VA_ARGS__)
-
-int ARGS_2(float, a, float, b) = 100;
-int ARGS_4(float, a, float, b) = 200;
-int EXTRACT_PARAMS_4(float, c, float, d) = 4000;
-int four = COUNT_ARGS(float, e, float, f);
-int four2 = COUNT_ARGS(float, i, float, j);
-int CALL_EXTRACT_PARAMS(4, float, g, float, h) = 5000;
-std::string s = TOSTRING(COUNT_ARGS(float, e, float, f));
 float add(float a, float b) { return a + b; }
 
-#define DEFINE_PLUGIN_FUNC(f_name, return_type, num_args, ...)             \
+#define DEFINE_PLUGIN_FUNC_WITH_COUNT(f_name, return_type, num_args, ...)  \
     return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
         return add(CALL_EXTRACT_PARAMS(num_args, __VA_ARGS__));            \
     }
 
-    // DEFINE_PLUGIN_FUNC(foo_func, int, 4, float, a, float, b)
+#define DEFINE_PLUGIN_FUNC(f_name, return_type, ...)   \
+    DEFINE_PLUGIN_FUNC_WITH_COUNT(f_name, return_type, \
+                                  COUNT_ARGS(__VA_ARGS__), __VA_ARGS__)
 
-#define DEFINE_PLUGIN_FUNC_AUTO_COUNT(f_name, return_type, ...)      \
-    DEFINE_PLUGIN_FUNC(f_name, return_type, COUNT_ARGS(__VA_ARGS__), \
-                       __VA_ARGS__)
-DEFINE_PLUGIN_FUNC_AUTO_COUNT(foo_func, int, float, a, float, b)
+DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
 
 // https://stackoverflow.com/a/44759398/1255535
 #define DEFINE_BRIDGED_FUNCTION(f_name, return_type, ...)              \
@@ -89,13 +83,6 @@ void* GetLibHandle() {
     if (!handle) {
         handle = dlopen(lib_name.c_str(), RTLD_LAZY);
         std::cout << "Loaded " << lib_name << std::endl;
-        std::cout << "a " << a << std::endl;
-        std::cout << "b " << b << std::endl;
-        std::cout << "four " << four << std::endl;
-        std::cout << "c " << c << std::endl;
-        std::cout << "d " << d << std::endl;
-        std::cout << "h " << h << std::endl;
-        std::cout << "s " << s << std::endl;
         std::cout << "foo_func(3, 5) " << foo_func(3, 5) << std::endl;
         if (!handle) {
             const char* msg = dlerror();
