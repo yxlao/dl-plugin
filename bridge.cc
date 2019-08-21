@@ -41,11 +41,6 @@
 //     float a1, int a2, short a3, double a4
 
 // clang-format off
-#define EXTRACT_TYPES_PARAMS_0(...)
-
-#define EXTRACT_TYPES_PARAMS_2(...) \
-    ARGS_1(__VA_ARGS__) ARGS_2(__VA_ARGS__)
-
 #define EXTRACT_TYPES_PARAMS_4(...) \
     ARGS_1(__VA_ARGS__) ARGS_2(__VA_ARGS__), \
     ARGS_3(__VA_ARGS__) ARGS_4(__VA_ARGS__)
@@ -54,69 +49,6 @@
     ARGS_1(__VA_ARGS__) ARGS_2(__VA_ARGS__), \
     ARGS_3(__VA_ARGS__) ARGS_4(__VA_ARGS__), \
     ARGS_5(__VA_ARGS__) ARGS_6(__VA_ARGS__)
-
-#define EXTRACT_TYPES_PARAMS_8(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__)
-
-#define EXTRACT_TYPES_PARAMS_10(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__), \
-    ARGS_9 (__VA_ARGS__) ARGS_10(__VA_ARGS__)
-
-#define EXTRACT_TYPES_PARAMS_12(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__), \
-    ARGS_9 (__VA_ARGS__) ARGS_10(__VA_ARGS__), \
-    ARGS_11(__VA_ARGS__) ARGS_12(__VA_ARGS__)
-
-#define EXTRACT_TYPES_PARAMS_14(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__), \
-    ARGS_9 (__VA_ARGS__) ARGS_10(__VA_ARGS__), \
-    ARGS_11(__VA_ARGS__) ARGS_12(__VA_ARGS__), \
-    ARGS_13(__VA_ARGS__) ARGS_14(__VA_ARGS__)
-
-#define EXTRACT_TYPES_PARAMS_16(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__), \
-    ARGS_9 (__VA_ARGS__) ARGS_10(__VA_ARGS__), \
-    ARGS_11(__VA_ARGS__) ARGS_12(__VA_ARGS__), \
-    ARGS_13(__VA_ARGS__) ARGS_14(__VA_ARGS__), \
-    ARGS_15(__VA_ARGS__) ARGS_16(__VA_ARGS__)
-
-#define EXTRACT_TYPES_PARAMS_18(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__), \
-    ARGS_9 (__VA_ARGS__) ARGS_10(__VA_ARGS__), \
-    ARGS_11(__VA_ARGS__) ARGS_12(__VA_ARGS__), \
-    ARGS_13(__VA_ARGS__) ARGS_14(__VA_ARGS__), \
-    ARGS_15(__VA_ARGS__) ARGS_16(__VA_ARGS__), \
-    ARGS_17(__VA_ARGS__) ARGS_18(__VA_ARGS__)
-
-#define EXTRACT_TYPES_PARAMS_20(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__), \
-    ARGS_9 (__VA_ARGS__) ARGS_10(__VA_ARGS__), \
-    ARGS_11(__VA_ARGS__) ARGS_12(__VA_ARGS__), \
-    ARGS_13(__VA_ARGS__) ARGS_14(__VA_ARGS__), \
-    ARGS_15(__VA_ARGS__) ARGS_16(__VA_ARGS__), \
-    ARGS_17(__VA_ARGS__) ARGS_18(__VA_ARGS__), \
-    ARGS_19(__VA_ARGS__) ARGS_20(__VA_ARGS__)
 // clang-format on
 
 // Convert to list of "arg_type arg_name" caller
@@ -128,7 +60,10 @@
 //     float, a1, int, a2, short, a3, double, a4
 // To:
 //     a1, a2, a3, a4
+// clang-format off
 #define EXTRACT_PARAMS_4(...) ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__)
+#define EXTRACT_PARAMS_6(...) ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__), ARGS_6(__VA_ARGS__)
+// clang-format on
 
 // Convert to list of "arg_name" caller
 #define CALL_EXTRACT_PARAMS(num_args, ...) \
@@ -227,5 +162,6 @@ struct Point sub_point(struct Point a, struct Point b) {
 // Example 3: use macro
 // DEFINE_BRIDGED_FUNCTION(mul_point, Point, Point(a), Point(b))
 DEFINE_BRIDGED_FUNC(mul_point, Point, Point, a, Point, b)
+// DEFINE_BRIDGED_FUNC(add_point_three, Point, Point, a, Point, b, Point c)
 
 }  // namespace bridge
