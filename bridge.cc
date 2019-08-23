@@ -213,14 +213,15 @@ HINSTANCE GetLibHandle() {
     return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
         typedef return_type (*f_type)(                                     \
                 CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__));         \
-        static f_type f = nullptr;                                         \
+        static f_type f = NULL;                                            \
                                                                            \
-        if (!f) {                                                          \
+        if (f == NULL) {                                                   \
             f = (f_type)GetProcAddress(GetLibHandle(), #f_name);           \
-            if (!f) {                                                      \
-                const char* msg = dlerror();                               \
-                throw std::runtime_error(std::string("Cannot load ") +     \
-                                         #f_name + ": " + msg);            \
+            if (f != NULL) {                                               \
+                std::cout << "Loaded func " << #f_name << std::endl;       \
+            } else {                                                       \
+                std::cerr << "Cannot load func " << #f_name << std::endl;  \
+                exit(1);                                                   \
             }                                                              \
         }                                                                  \
         return f(CALL_EXTRACT_PARAMS(num_args, __VA_ARGS__));              \
@@ -280,39 +281,39 @@ void* GetLibHandle() {
 namespace bridge {
 
 // Example 1: casting to std::function
-struct Point add_point(struct Point a, struct Point b) {
-    static const std::string f_name = "add_point";
-    using signature = struct Point(struct Point, struct Point);
-    std::function<signature> f = nullptr;
-
-    if (!f) {
-        f = static_cast<signature*>(
-                (signature*)GetProcAddress(GetLibHandle(), f_name.c_str()));
-        if (!f) {
-            throw std::runtime_error("Cannot load " + f_name);
-        }
-    }
-
-    return f(a, b);
-}
-
-// Example 2: use function pointer directly
-// struct Point sub_point(struct Point a, struct Point b) {
-//     static const std::string f_name = "sub_point";
-//     typedef struct Point (*f_type)(struct Point a, struct Point b);
-//     static f_type f = nullptr;
+// struct Point add_point(struct Point a, struct Point b) {
+//     static const std::string f_name = "add_point";
+//     using signature = struct Point(struct Point, struct Point);
+//     std::function<signature> f = nullptr;
 
 //     if (!f) {
-//         f = (f_type)dlsym(GetLibHandle(), f_name.c_str());
+//         f = static_cast<signature*>(
+//                 (signature*)GetProcAddress(GetLibHandle(), f_name.c_str()));
 //         if (!f) {
-//             const char* msg = dlerror();
-//             throw std::runtime_error("Cannot load " + f_name + ": " +
-//                                      std::string(msg));
+//             throw std::runtime_error("Cannot load " + f_name);
 //         }
 //     }
 
 //     return f(a, b);
 // }
+
+// Example 2: use function pointer directly
+Point add_point(Point a, Point b) {
+    typedef Point (*f_type)(Point a, Point b);
+    static f_type f = 0;
+    if (f == 0) {
+        f = (f_type)GetProcAddress(GetLibHandle(), "add_point");
+        if (f != 0) {
+            std::cout << "Loaded func "
+                      << "add_point" << std::endl;
+        } else {
+            std::cerr << "Cannot load func "
+                      << "add_point" << std::endl;
+            exit(1);
+        }
+    }
+    return f(a, b);
+}
 
 // Example 3: use macro
 // DEFINE_BRIDGED_FUNC(add_point, Point, Point, a, Point, b)
