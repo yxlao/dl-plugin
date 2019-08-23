@@ -214,6 +214,16 @@ HINSTANCE GetLibHandle() {
     static const std::string lib_name = "point.dll";
 
     if (!handle) {
+        static const std::string k4a_lib_name =
+                "C:\\Program Files\\Azure Kinect SDK "
+                "v1.2.0\\sdk\\windows-desktop\\amd64\\release\\bin\\k4a.dll";
+        handle = LoadLibrary(TEXT(k4a_lib_name.c_str()));
+        if (handle != NULL) {
+            std::cout << "Loaded " << k4a_lib_name << std::endl;
+        } else {
+            std::cerr << "Cannot load " << k4a_lib_name << std::endl;
+        }
+
         handle = LoadLibrary(TEXT(lib_name.c_str()));
         if (handle != NULL) {
             std::cout << "Loaded " << lib_name << std::endl;
