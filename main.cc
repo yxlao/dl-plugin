@@ -8,7 +8,6 @@ int main() {
     Point b = {2, 2};
     Point c = {3, 3};
 
-    std::cout << "hello" << std::endl;
     Point add = bridge::add_point(a, b);
     std::cout << "add: " << std::endl;
     std::cout << "add: " << add.x << ", " << add.y << std::endl;

@@ -63,7 +63,6 @@
 //     float, a1, int, a2, short, a3, double, a4
 // To:
 //     float a1, int a2, short a3, double a4
-
 // clang-format off
 #define EXTRACT_TYPES_PARAMS_0(...)
 
@@ -144,7 +143,7 @@
 // clang-format on
 
 // Convert to list of "arg_type arg_name" caller
-#define CALL_EXTRACT_TYPES_PARAMS(num_args, ...) \
+#define EXTRACT_TYPES_PARAMS(num_args, ...) \
     EXTRACT_TYPES_PARAMS_##num_args(__VA_ARGS__)
 
 // Convert to list of "arg_name"
@@ -153,7 +152,6 @@
 // To:
 //     a1, a2, a3, a4
 // clang-format off
-
 #define EXTRACT_PARAMS_0(...)
 
 #define EXTRACT_PARAMS_2(...) \
@@ -208,8 +206,7 @@
 // clang-format on
 
 // Convert to list of "arg_name" caller
-#define CALL_EXTRACT_PARAMS(num_args, ...) \
-    EXTRACT_PARAMS_##num_args(__VA_ARGS__)
+#define EXTRACT_PARAMS(num_args, ...) EXTRACT_PARAMS_##num_args(__VA_ARGS__)
 
 #ifdef _WIN32
 HINSTANCE GetLibHandle() {
@@ -230,9 +227,9 @@ HINSTANCE GetLibHandle() {
     return handle;
 }
 #define DEFINE_BRIDGED_FUNC_WITH_COUNT(f_name, return_type, num_args, ...) \
-    return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
+    return_type f_name(EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) {      \
         typedef return_type (*f_type)(                                     \
-                CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__));         \
+                EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__));              \
         static f_type f = NULL;                                            \
                                                                            \
         if (f == NULL) {                                                   \
@@ -244,7 +241,7 @@ HINSTANCE GetLibHandle() {
                 exit(1);                                                   \
             }                                                              \
         }                                                                  \
-        return f(CALL_EXTRACT_PARAMS(num_args, __VA_ARGS__));              \
+        return f(EXTRACT_PARAMS(num_args, __VA_ARGS__));                   \
     }
 #else
 void* GetLibHandle() {
@@ -264,9 +261,9 @@ void* GetLibHandle() {
     return handle;
 }
 #define DEFINE_BRIDGED_FUNC_WITH_COUNT(f_name, return_type, num_args, ...) \
-    return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
+    return_type f_name(EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) {      \
         typedef return_type (*f_type)(                                     \
-                CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__));         \
+                EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__));              \
         static f_type f = nullptr;                                         \
                                                                            \
         if (!f) {                                                          \
@@ -277,7 +274,7 @@ void* GetLibHandle() {
                                          #f_name + ": " + msg);            \
             }                                                              \
         }                                                                  \
-        return f(CALL_EXTRACT_PARAMS(num_args, __VA_ARGS__));              \
+        return f(EXTRACT_PARAMS(num_args, __VA_ARGS__));                   \
     }
 #endif
 
@@ -288,8 +285,8 @@ void* GetLibHandle() {
 // float add(float a, float b) { return a + b; }
 
 // #define DEFINE_PLUGIN_FUNC_WITH_COUNT(f_name, return_type, num_args, ...)  \
-//     return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
-//         return add(CALL_EXTRACT_PARAMS(num_args, __VA_ARGS__));            \
+//     return_type f_name(EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
+//         return add(EXTRACT_PARAMS(num_args, __VA_ARGS__));            \
 //     }
 
 // #define DEFINE_PLUGIN_FUNC(f_name, return_type, ...)   \
@@ -303,7 +300,7 @@ namespace bridge {
 // Example: use function pointer directly
 // Point add_point(Point a, Point b) {
 //     // int count = COUNT_ARGS(Point, a, Point, b);
-//     CALL_EXTRACT_TYPES_PARAMS(2, float, count) = 30;
+//     EXTRACT_TYPES_PARAMS(2, float, count) = 30;
 //     std::cout << "count: " << count << std::endl;
 
 //     typedef Point (*f_type)(Point a, Point b);
