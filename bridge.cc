@@ -34,10 +34,11 @@
 #define ARGS_21(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, ...) a21
 // clang-format on
 
+#define EXPAND(x) x  // MSVC fix
+
 // Count __VA_ARGS__ for MSVC https://stackoverflow.com/a/26685339/1255535
 #ifdef _MSC_VER
 
-#define EXPAND(x) x
 #define __NARGS(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, \
                 _15, _16, _17, _18, _19, _20, _21, VAL, ...)                 \
     VAL
@@ -67,79 +68,79 @@
 #define EXTRACT_TYPES_PARAMS_0(...)
 
 #define EXTRACT_TYPES_PARAMS_2(...) \
-    ARGS_1(__VA_ARGS__) ARGS_2(__VA_ARGS__)
+    EXPAND(ARGS_1(__VA_ARGS__)) EXPAND(ARGS_2(__VA_ARGS__))
 
 #define EXTRACT_TYPES_PARAMS_4(...) \
-    ARGS_1(__VA_ARGS__) ARGS_2(__VA_ARGS__), \
-    ARGS_3(__VA_ARGS__) ARGS_4(__VA_ARGS__)
+    EXPAND(ARGS_1(__VA_ARGS__)) EXPAND(ARGS_2(__VA_ARGS__)), \
+    EXPAND(ARGS_3(__VA_ARGS__)) EXPAND(ARGS_4(__VA_ARGS__))
 
 #define EXTRACT_TYPES_PARAMS_6(...) \
-    ARGS_1(__VA_ARGS__) ARGS_2(__VA_ARGS__), \
-    ARGS_3(__VA_ARGS__) ARGS_4(__VA_ARGS__), \
-    ARGS_5(__VA_ARGS__) ARGS_6(__VA_ARGS__)
+    EXPAND(ARGS_1(__VA_ARGS__)) EXPAND(ARGS_2(__VA_ARGS__)), \
+    EXPAND(ARGS_3(__VA_ARGS__)) EXPAND(ARGS_4(__VA_ARGS__)), \
+    EXPAND(ARGS_5(__VA_ARGS__)) EXPAND(ARGS_6(__VA_ARGS__))
 
 #define EXTRACT_TYPES_PARAMS_8(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__)
+    EXPAND(ARGS_1 (__VA_ARGS__)) EXPAND(ARGS_2 (__VA_ARGS__)), \
+    EXPAND(ARGS_3 (__VA_ARGS__)) EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_5 (__VA_ARGS__)) EXPAND(ARGS_6 (__VA_ARGS__)), \
+    EXPAND(ARGS_7 (__VA_ARGS__)) EXPAND(ARGS_8 (__VA_ARGS__))
 
 #define EXTRACT_TYPES_PARAMS_10(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__), \
-    ARGS_9 (__VA_ARGS__) ARGS_10(__VA_ARGS__)
+    EXPAND(ARGS_1 (__VA_ARGS__)) EXPAND(ARGS_2 (__VA_ARGS__)), \
+    EXPAND(ARGS_3 (__VA_ARGS__)) EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_5 (__VA_ARGS__)) EXPAND(ARGS_6 (__VA_ARGS__)), \
+    EXPAND(ARGS_7 (__VA_ARGS__)) EXPAND(ARGS_8 (__VA_ARGS__)), \
+    EXPAND(ARGS_9 (__VA_ARGS__)) EXPAND(ARGS_10(__VA_ARGS__))
 
 #define EXTRACT_TYPES_PARAMS_12(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__), \
-    ARGS_9 (__VA_ARGS__) ARGS_10(__VA_ARGS__), \
-    ARGS_11(__VA_ARGS__) ARGS_12(__VA_ARGS__)
+    EXPAND(ARGS_1 (__VA_ARGS__)) EXPAND(ARGS_2 (__VA_ARGS__)), \
+    EXPAND(ARGS_3 (__VA_ARGS__)) EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_5 (__VA_ARGS__)) EXPAND(ARGS_6 (__VA_ARGS__)), \
+    EXPAND(ARGS_7 (__VA_ARGS__)) EXPAND(ARGS_8 (__VA_ARGS__)), \
+    EXPAND(ARGS_9 (__VA_ARGS__)) EXPAND(ARGS_10(__VA_ARGS__)), \
+    EXPAND(ARGS_11(__VA_ARGS__)) EXPAND(ARGS_12(__VA_ARGS__))
 
 #define EXTRACT_TYPES_PARAMS_14(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__), \
-    ARGS_9 (__VA_ARGS__) ARGS_10(__VA_ARGS__), \
-    ARGS_11(__VA_ARGS__) ARGS_12(__VA_ARGS__), \
-    ARGS_13(__VA_ARGS__) ARGS_14(__VA_ARGS__)
+    EXPAND(ARGS_1 (__VA_ARGS__)) EXPAND(ARGS_2 (__VA_ARGS__)), \
+    EXPAND(ARGS_3 (__VA_ARGS__)) EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_5 (__VA_ARGS__)) EXPAND(ARGS_6 (__VA_ARGS__)), \
+    EXPAND(ARGS_7 (__VA_ARGS__)) EXPAND(ARGS_8 (__VA_ARGS__)), \
+    EXPAND(ARGS_9 (__VA_ARGS__)) EXPAND(ARGS_10(__VA_ARGS__)), \
+    EXPAND(ARGS_11(__VA_ARGS__)) EXPAND(ARGS_12(__VA_ARGS__)), \
+    EXPAND(ARGS_13(__VA_ARGS__)) EXPAND(ARGS_14(__VA_ARGS__))
 
 #define EXTRACT_TYPES_PARAMS_16(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__), \
-    ARGS_9 (__VA_ARGS__) ARGS_10(__VA_ARGS__), \
-    ARGS_11(__VA_ARGS__) ARGS_12(__VA_ARGS__), \
-    ARGS_13(__VA_ARGS__) ARGS_14(__VA_ARGS__), \
-    ARGS_15(__VA_ARGS__) ARGS_16(__VA_ARGS__)
+    EXPAND(ARGS_1 (__VA_ARGS__)) EXPAND(ARGS_2 (__VA_ARGS__)), \
+    EXPAND(ARGS_3 (__VA_ARGS__)) EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_5 (__VA_ARGS__)) EXPAND(ARGS_6 (__VA_ARGS__)), \
+    EXPAND(ARGS_7 (__VA_ARGS__)) EXPAND(ARGS_8 (__VA_ARGS__)), \
+    EXPAND(ARGS_9 (__VA_ARGS__)) EXPAND(ARGS_10(__VA_ARGS__)), \
+    EXPAND(ARGS_11(__VA_ARGS__)) EXPAND(ARGS_12(__VA_ARGS__)), \
+    EXPAND(ARGS_13(__VA_ARGS__)) EXPAND(ARGS_14(__VA_ARGS__)), \
+    EXPAND(ARGS_15(__VA_ARGS__)) EXPAND(ARGS_16(__VA_ARGS__))
 
 #define EXTRACT_TYPES_PARAMS_18(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__), \
-    ARGS_9 (__VA_ARGS__) ARGS_10(__VA_ARGS__), \
-    ARGS_11(__VA_ARGS__) ARGS_12(__VA_ARGS__), \
-    ARGS_13(__VA_ARGS__) ARGS_14(__VA_ARGS__), \
-    ARGS_15(__VA_ARGS__) ARGS_16(__VA_ARGS__), \
-    ARGS_17(__VA_ARGS__) ARGS_18(__VA_ARGS__)
+    EXPAND(ARGS_1 (__VA_ARGS__)) EXPAND(ARGS_2 (__VA_ARGS__)), \
+    EXPAND(ARGS_3 (__VA_ARGS__)) EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_5 (__VA_ARGS__)) EXPAND(ARGS_6 (__VA_ARGS__)), \
+    EXPAND(ARGS_7 (__VA_ARGS__)) EXPAND(ARGS_8 (__VA_ARGS__)), \
+    EXPAND(ARGS_9 (__VA_ARGS__)) EXPAND(ARGS_10(__VA_ARGS__)), \
+    EXPAND(ARGS_11(__VA_ARGS__)) EXPAND(ARGS_12(__VA_ARGS__)), \
+    EXPAND(ARGS_13(__VA_ARGS__)) EXPAND(ARGS_14(__VA_ARGS__)), \
+    EXPAND(ARGS_15(__VA_ARGS__)) EXPAND(ARGS_16(__VA_ARGS__)), \
+    EXPAND(ARGS_17(__VA_ARGS__)) EXPAND(ARGS_18(__VA_ARGS__))
 
 #define EXTRACT_TYPES_PARAMS_20(...) \
-    ARGS_1 (__VA_ARGS__) ARGS_2 (__VA_ARGS__), \
-    ARGS_3 (__VA_ARGS__) ARGS_4 (__VA_ARGS__), \
-    ARGS_5 (__VA_ARGS__) ARGS_6 (__VA_ARGS__), \
-    ARGS_7 (__VA_ARGS__) ARGS_8 (__VA_ARGS__), \
-    ARGS_9 (__VA_ARGS__) ARGS_10(__VA_ARGS__), \
-    ARGS_11(__VA_ARGS__) ARGS_12(__VA_ARGS__), \
-    ARGS_13(__VA_ARGS__) ARGS_14(__VA_ARGS__), \
-    ARGS_15(__VA_ARGS__) ARGS_16(__VA_ARGS__), \
-    ARGS_17(__VA_ARGS__) ARGS_18(__VA_ARGS__), \
-    ARGS_19(__VA_ARGS__) ARGS_20(__VA_ARGS__)
+    EXPAND(ARGS_1 (__VA_ARGS__)) EXPAND(ARGS_2 (__VA_ARGS__)), \
+    EXPAND(ARGS_3 (__VA_ARGS__)) EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_5 (__VA_ARGS__)) EXPAND(ARGS_6 (__VA_ARGS__)), \
+    EXPAND(ARGS_7 (__VA_ARGS__)) EXPAND(ARGS_8 (__VA_ARGS__)), \
+    EXPAND(ARGS_9 (__VA_ARGS__)) EXPAND(ARGS_10(__VA_ARGS__)), \
+    EXPAND(ARGS_11(__VA_ARGS__)) EXPAND(ARGS_12(__VA_ARGS__)), \
+    EXPAND(ARGS_13(__VA_ARGS__)) EXPAND(ARGS_14(__VA_ARGS__)), \
+    EXPAND(ARGS_15(__VA_ARGS__)) EXPAND(ARGS_16(__VA_ARGS__)), \
+    EXPAND(ARGS_17(__VA_ARGS__)) EXPAND(ARGS_18(__VA_ARGS__)), \
+    EXPAND(ARGS_19(__VA_ARGS__)) EXPAND(ARGS_20(__VA_ARGS__))
 // clang-format on
 
 // Convert to list of "arg_type arg_name" caller
@@ -156,54 +157,54 @@
 #define EXTRACT_PARAMS_0(...)
 
 #define EXTRACT_PARAMS_2(...) \
-    ARGS_2(__VA_ARGS__)
+    EXPAND(ARGS_2(__VA_ARGS__))
 
 #define EXTRACT_PARAMS_4(...) \
-    ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__)
+    EXPAND(ARGS_2(__VA_ARGS__)), EXPAND(ARGS_4(__VA_ARGS__))
 
 #define EXTRACT_PARAMS_6(...) \
-    ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__), \
-    ARGS_6(__VA_ARGS__)
+    EXPAND(ARGS_2(__VA_ARGS__)), EXPAND(ARGS_4(__VA_ARGS__)), \
+    EXPAND(ARGS_6(__VA_ARGS__))
 
 #define EXTRACT_PARAMS_8(...) \
-    ARGS_2(__VA_ARGS__), ARGS_4(__VA_ARGS__), \
-    ARGS_6(__VA_ARGS__), ARGS_8(__VA_ARGS__)
+    EXPAND(ARGS_2(__VA_ARGS__)), EXPAND(ARGS_4(__VA_ARGS__)), \
+    EXPAND(ARGS_6(__VA_ARGS__)), EXPAND(ARGS_8(__VA_ARGS__))
 
 #define EXTRACT_PARAMS_10(...) \
-    ARGS_2 (__VA_ARGS__), ARGS_4 (__VA_ARGS__), \
-    ARGS_6 (__VA_ARGS__), ARGS_8 (__VA_ARGS__), \
-    ARGS_10(__VA_ARGS__)
+    EXPAND(ARGS_2 (__VA_ARGS__)), EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_6 (__VA_ARGS__)), EXPAND(ARGS_8 (__VA_ARGS__)), \
+    EXPAND(ARGS_10(__VA_ARGS__))
 
 #define EXTRACT_PARAMS_12(...) \
-    ARGS_2 (__VA_ARGS__), ARGS_4 (__VA_ARGS__), \
-    ARGS_6 (__VA_ARGS__), ARGS_8 (__VA_ARGS__), \
-    ARGS_10(__VA_ARGS__), ARGS_12(__VA_ARGS__)
+    EXPAND(ARGS_2 (__VA_ARGS__)), EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_6 (__VA_ARGS__)), EXPAND(ARGS_8 (__VA_ARGS__)), \
+    EXPAND(ARGS_10(__VA_ARGS__)), EXPAND(ARGS_12(__VA_ARGS__))
 
 #define EXTRACT_PARAMS_14(...) \
-    ARGS_2 (__VA_ARGS__), ARGS_4 (__VA_ARGS__), \
-    ARGS_6 (__VA_ARGS__), ARGS_8 (__VA_ARGS__), \
-    ARGS_10(__VA_ARGS__), ARGS_12(__VA_ARGS__), \
-    ARGS_14(__VA_ARGS__)
+    EXPAND(ARGS_2 (__VA_ARGS__)), EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_6 (__VA_ARGS__)), EXPAND(ARGS_8 (__VA_ARGS__)), \
+    EXPAND(ARGS_10(__VA_ARGS__)), EXPAND(ARGS_12(__VA_ARGS__)), \
+    EXPAND(ARGS_14(__VA_ARGS__))
 
 #define EXTRACT_PARAMS_16(...) \
-    ARGS_2 (__VA_ARGS__), ARGS_4 (__VA_ARGS__), \
-    ARGS_6 (__VA_ARGS__), ARGS_8 (__VA_ARGS__), \
-    ARGS_10(__VA_ARGS__), ARGS_12(__VA_ARGS__), \
-    ARGS_14(__VA_ARGS__), ARGS_16(__VA_ARGS__)
+    EXPAND(ARGS_2 (__VA_ARGS__)), EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_6 (__VA_ARGS__)), EXPAND(ARGS_8 (__VA_ARGS__)), \
+    EXPAND(ARGS_10(__VA_ARGS__)), EXPAND(ARGS_12(__VA_ARGS__)), \
+    EXPAND(ARGS_14(__VA_ARGS__)), EXPAND(ARGS_16(__VA_ARGS__))
 
 #define EXTRACT_PARAMS_18(...) \
-    ARGS_2 (__VA_ARGS__), ARGS_4 (__VA_ARGS__), \
-    ARGS_6 (__VA_ARGS__), ARGS_8 (__VA_ARGS__), \
-    ARGS_10(__VA_ARGS__), ARGS_12(__VA_ARGS__), \
-    ARGS_14(__VA_ARGS__), ARGS_16(__VA_ARGS__), \
-    ARGS_18(__VA_ARGS__)
+    EXPAND(ARGS_2 (__VA_ARGS__)), EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_6 (__VA_ARGS__)), EXPAND(ARGS_8 (__VA_ARGS__)), \
+    EXPAND(ARGS_10(__VA_ARGS__)), EXPAND(ARGS_12(__VA_ARGS__)), \
+    EXPAND(ARGS_14(__VA_ARGS__)), EXPAND(ARGS_16(__VA_ARGS__)), \
+    EXPAND(ARGS_18(__VA_ARGS__))
 
 #define EXTRACT_PARAMS_20(...) \
-    ARGS_2 (__VA_ARGS__), ARGS_4 (__VA_ARGS__), \
-    ARGS_6 (__VA_ARGS__), ARGS_8 (__VA_ARGS__), \
-    ARGS_10(__VA_ARGS__), ARGS_12(__VA_ARGS__), \
-    ARGS_14(__VA_ARGS__), ARGS_16(__VA_ARGS__), \
-    ARGS_18(__VA_ARGS__), ARGS_20(__VA_ARGS__)
+    EXPAND(ARGS_2 (__VA_ARGS__)), EXPAND(ARGS_4 (__VA_ARGS__)), \
+    EXPAND(ARGS_6 (__VA_ARGS__)), EXPAND(ARGS_8 (__VA_ARGS__)), \
+    EXPAND(ARGS_10(__VA_ARGS__)), EXPAND(ARGS_12(__VA_ARGS__)), \
+    EXPAND(ARGS_14(__VA_ARGS__)), EXPAND(ARGS_16(__VA_ARGS__)), \
+    EXPAND(ARGS_18(__VA_ARGS__)), EXPAND(ARGS_20(__VA_ARGS__))
 // clang-format on
 
 // Convert to list of "arg_name" caller
@@ -300,28 +301,29 @@ void* GetLibHandle() {
 namespace bridge {
 
 // Example: use function pointer directly
-Point add_point(Point a, Point b) {
-    int count = COUNT_ARGS(Point, a, Point, b);
+// Point add_point(Point a, Point b) {
+//     // int count = COUNT_ARGS(Point, a, Point, b);
+//     CALL_EXTRACT_TYPES_PARAMS(2, float, count) = 30;
+//     std::cout << "count: " << count << std::endl;
 
-    std::cout << "count: " << count << std::endl;
-    typedef Point (*f_type)(Point a, Point b);
-    static f_type f = 0;
-    if (f == 0) {
-        f = (f_type)GetProcAddress(GetLibHandle(), "add_point");
-        if (f != 0) {
-            std::cout << "Loaded func "
-                      << "add_point" << std::endl;
-        } else {
-            std::cerr << "Cannot load func "
-                      << "add_point" << std::endl;
-            exit(1);
-        }
-    }
-    return f(a, b);
-}
+//     typedef Point (*f_type)(Point a, Point b);
+//     static f_type f = 0;
+//     if (f == 0) {
+//         f = (f_type)GetProcAddress(GetLibHandle(), "add_point");
+//         if (f != 0) {
+//             std::cout << "Loaded func "
+//                       << "add_point" << std::endl;
+//         } else {
+//             std::cerr << "Cannot load func "
+//                       << "add_point" << std::endl;
+//             exit(1);
+//         }
+//     }
+//     return f(a, b);
+// }
 
 // Example 3: use macro
-// DEFINE_BRIDGED_FUNC(add_point, Point, Point, a, Point, b)
+DEFINE_BRIDGED_FUNC(add_point, Point, Point, a, Point, b)
 // DEFINE_BRIDGED_FUNC(sub_point, Point, Point, a, Point, b)
 // DEFINE_BRIDGED_FUNC(mul_point, Point, Point, a, Point, b)
 // DEFINE_BRIDGED_FUNC(add_point_three, Point, Point, a, Point, b, Point, c)
