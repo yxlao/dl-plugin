@@ -324,8 +324,8 @@ namespace bridge {
 
 // Example 3: use macro
 DEFINE_BRIDGED_FUNC(add_point, Point, Point, a, Point, b)
-// DEFINE_BRIDGED_FUNC(sub_point, Point, Point, a, Point, b)
-// DEFINE_BRIDGED_FUNC(mul_point, Point, Point, a, Point, b)
-// DEFINE_BRIDGED_FUNC(add_point_three, Point, Point, a, Point, b, Point, c)
+DEFINE_BRIDGED_FUNC(sub_point, Point, Point, a, Point, b)
+DEFINE_BRIDGED_FUNC(mul_point, Point, Point, a, Point, b)
+DEFINE_BRIDGED_FUNC(add_point_three, Point, Point, a, Point, b, Point, c)
 
 }  // namespace bridge
