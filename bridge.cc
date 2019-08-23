@@ -1,4 +1,8 @@
+#ifdef _WIN32
+#include <Windows.h>
+#else
 #include <dlfcn.h>
+#endif
 #include <functional>
 #include <iostream>
 #include <string>
@@ -187,6 +191,57 @@
 #define CALL_EXTRACT_PARAMS(num_args, ...) \
     EXTRACT_PARAMS_##num_args(__VA_ARGS__)
 
+#ifdef _WIN32
+HINSTANCE GetLibHandle() {
+    static HINSTANCE handle = NULL;
+    static const std::string lib_name = "point.dll";
+
+    if (!handle) {
+        handle = LoadLibrary(TEXT(lib_name.c_str()));
+        if (handle != NULL) {
+            std::cout << "Loaded " << lib_name << std::endl;
+        } else {
+            std::cerr << "Cannot load " << lib_name << std::endl;
+            exit(1);
+        }
+    }
+
+    // handle != nullptr guaranteed here
+    return handle;
+}
+#define DEFINE_BRIDGED_FUNC_WITH_COUNT(f_name, return_type, num_args, ...) \
+    return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
+        typedef return_type (*f_type)(                                     \
+                CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__));         \
+        static f_type f = nullptr;                                         \
+                                                                           \
+        if (!f) {                                                          \
+            f = (f_type)GetProcAddress(GetLibHandle(), #f_name);           \
+            if (!f) {                                                      \
+                const char* msg = dlerror();                               \
+                throw std::runtime_error(std::string("Cannot load ") +     \
+                                         #f_name + ": " + msg);            \
+            }                                                              \
+        }                                                                  \
+        return f(CALL_EXTRACT_PARAMS(num_args, __VA_ARGS__));              \
+    }
+#else
+void* GetLibHandle() {
+    static void* handle = nullptr;
+    static const std::string lib_name = "libpoint.so";
+
+    if (!handle) {
+        handle = dlopen(lib_name.c_str(), RTLD_LAZY);
+        std::cout << "Loaded " << lib_name << std::endl;
+        if (!handle) {
+            const char* msg = dlerror();
+            throw std::runtime_error("Cannot load " + std::string(msg));
+        }
+    }
+
+    // handle != nullptr guaranteed here
+    return handle;
+}
 #define DEFINE_BRIDGED_FUNC_WITH_COUNT(f_name, return_type, num_args, ...) \
     return_type f_name(CALL_EXTRACT_TYPES_PARAMS(num_args, __VA_ARGS__)) { \
         typedef return_type (*f_type)(                                     \
@@ -203,6 +258,7 @@
         }                                                                  \
         return f(CALL_EXTRACT_PARAMS(num_args, __VA_ARGS__));              \
     }
+#endif
 
 #define DEFINE_BRIDGED_FUNC(f_name, return_type, ...)   \
     DEFINE_BRIDGED_FUNC_WITH_COUNT(f_name, return_type, \
@@ -221,43 +277,24 @@
 
 // DEFINE_PLUGIN_FUNC(foo_func, int, float, a, float, b)
 
-void* GetLibHandle() {
-    static void* handle = nullptr;
-    static const std::string lib_name = "libpoint.so";
-
-    if (!handle) {
-        handle = dlopen(lib_name.c_str(), RTLD_LAZY);
-        std::cout << "Loaded " << lib_name << std::endl;
-        if (!handle) {
-            const char* msg = dlerror();
-            throw std::runtime_error("Cannot load " + std::string(msg));
-        }
-    }
-
-    // handle != nullptr guaranteed here
-    return handle;
-}
-
 namespace bridge {
 
 // Example 1: casting to std::function
-// struct Point add_point(struct Point a, struct Point b) {
-//     static const std::string f_name = "add_point";
-//     using signature = struct Point(struct Point, struct Point);
-//     std::function<signature> f = nullptr;
+struct Point add_point(struct Point a, struct Point b) {
+    static const std::string f_name = "add_point";
+    using signature = struct Point(struct Point, struct Point);
+    std::function<signature> f = nullptr;
 
-//     if (!f) {
-//         f = static_cast<signature*>(
-//                 (signature*)dlsym(GetLibHandle(), f_name.c_str()));
-//         if (!f) {
-//             const char* msg = dlerror();
-//             throw std::runtime_error("Cannot load " + f_name + ": " +
-//                                      std::string(msg));
-//         }
-//     }
+    if (!f) {
+        f = static_cast<signature*>(
+                (signature*)GetProcAddress(GetLibHandle(), f_name.c_str()));
+        if (!f) {
+            throw std::runtime_error("Cannot load " + f_name);
+        }
+    }
 
-//     return f(a, b);
-// }
+    return f(a, b);
+}
 
 // Example 2: use function pointer directly
 // struct Point sub_point(struct Point a, struct Point b) {
@@ -278,9 +315,9 @@ namespace bridge {
 // }
 
 // Example 3: use macro
-DEFINE_BRIDGED_FUNC(add_point, Point, Point, a, Point, b)
-DEFINE_BRIDGED_FUNC(sub_point, Point, Point, a, Point, b)
-DEFINE_BRIDGED_FUNC(mul_point, Point, Point, a, Point, b)
-DEFINE_BRIDGED_FUNC(add_point_three, Point, Point, a, Point, b, Point, c)
+// DEFINE_BRIDGED_FUNC(add_point, Point, Point, a, Point, b)
+// DEFINE_BRIDGED_FUNC(sub_point, Point, Point, a, Point, b)
+// DEFINE_BRIDGED_FUNC(mul_point, Point, Point, a, Point, b)
+// DEFINE_BRIDGED_FUNC(add_point_three, Point, Point, a, Point, b, Point, c)
 
 }  // namespace bridge
