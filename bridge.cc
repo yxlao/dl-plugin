@@ -10,6 +10,8 @@
 #include "bridge.h"
 #include "point.h"
 
+#define EXPAND(x) x
+
 // clang-format off
 #define ARGS_1(a1, ...) a1
 #define ARGS_2(a1, a2, ...) a2
@@ -34,9 +36,11 @@
 #define ARGS_21(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, ...) a21
 // clang-format on
 
-#define COUNT_ARGS(...)                                                      \
-    ARGS_21(dummy, ##__VA_ARGS__, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, \
-            8, 7, 6, 5, 4, 3, 2, 1, 0)
+// #define COUNT_ARGS(...) (sizeof((int[]){EXPAND(__VA_ARGS__)}) / sizeof(int))
+
+#define COUNT_ARGS(...)                                                     \
+    ARGS_21(dummy, EXPAND(__VA_ARGS__), 19, 18, 17, 16, 15, 14, 13, 12, 11, \
+            10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 
 // Convert to list of "arg_type arg_name"
 // Converts:
@@ -280,25 +284,11 @@ void* GetLibHandle() {
 
 namespace bridge {
 
-// Example 1: casting to std::function
-// struct Point add_point(struct Point a, struct Point b) {
-//     static const std::string f_name = "add_point";
-//     using signature = struct Point(struct Point, struct Point);
-//     std::function<signature> f = nullptr;
-
-//     if (!f) {
-//         f = static_cast<signature*>(
-//                 (signature*)GetProcAddress(GetLibHandle(), f_name.c_str()));
-//         if (!f) {
-//             throw std::runtime_error("Cannot load " + f_name);
-//         }
-//     }
-
-//     return f(a, b);
-// }
-
-// Example 2: use function pointer directly
+// Example: use function pointer directly
 Point add_point(Point a, Point b) {
+    int count = COUNT_ARGS(Point, a, Point, b);
+
+    std::cout << "count: " << count << std::endl;
     typedef Point (*f_type)(Point a, Point b);
     static f_type f = 0;
     if (f == 0) {
